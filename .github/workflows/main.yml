@@ -1,0 +1,27 @@
+name: CI Mentoria
+
+# Gatilhos/Triggers -> Quando essa pipeline deve executar
+on:
+  workflow_dispatch: 
+
+# Declarações
+jobs:
+  tests:
+    # Config SO
+    runs-on: ubuntu-latest
+    #Vvariáveis de ambiente, haves e acesso
+    env:
+      API_BASE_URL: 'http://localhost:3000' # URL base da API REST Banco API ou do Mock Server
+      PORT: 4000 
+    #Ações ou Passos
+    steps:
+      - name: Clone Projeto
+        uses: actions/checkout@v4
+      - name: Instalando as dependências do projeto
+        run: npm install
+      - name: Iniciando servidor de mocks
+        run: npm run mock-server &
+      - name: Iniciando servidor da aplicação
+        run: npm run server &
+      - name: Executando os testes do projeto
+        run: npx cypress run
